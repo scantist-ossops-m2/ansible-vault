@@ -52,7 +52,7 @@ def make_secrets(secret):
     if parse_version(ansible.__version__) < parse_version("2.4"):
         return secret
 
-    from ansible.constants import DEFAULT_VAULT_ID_MATCH
+    from ansible.constants import DEFAULT_VAULT_ID_MATCH  # pylint: disable=no-name-in-module
     from ansible.parsing.vault import VaultSecret
 
     return [(DEFAULT_VAULT_ID_MATCH, VaultSecret(secret))]

@@ -45,6 +45,7 @@ class Vault(object):
         encrypted = decode_text(self.vault.encrypt(text))
         if stream:
             stream.write(encrypted)
+            return None
         else:
             return encrypted
 
