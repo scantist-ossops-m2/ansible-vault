@@ -15,6 +15,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 from abc import ABCMeta, abstractmethod
+from importlib import import_module
 
 import ansible
 from pkg_resources import parse_version
@@ -52,7 +53,6 @@ def make_secrets(secret):
     if parse_version(ansible.__version__) < parse_version("2.4"):
         return secret
 
-    from ansible.constants import DEFAULT_VAULT_ID_MATCH  # pylint: disable=no-name-in-module
-    from ansible.parsing.vault import VaultSecret
-
-    return [(DEFAULT_VAULT_ID_MATCH, VaultSecret(secret))]
+    return [(
+        import_module("ansible.constants").DEFAULT_VAULT_ID_MATCH,
+        import_module("ansible.parsing.vault").VaultSecret(secret))]

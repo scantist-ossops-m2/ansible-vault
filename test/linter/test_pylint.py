@@ -27,19 +27,23 @@ def test_pylint_src(chdir_root_path):
     cmd = ". --rcfile={} --score=no".format(os.path.abspath(".pylintrc"))
     stdout, stderr = import_module("pylint.epylint").py_run(cmd, return_std=True)
     stdout, stderr = stdout.getvalue(), stderr.getvalue()
+    assert "" == stderr, stderr
     assert "" == stdout, stdout
 
 
 @pytest.mark.linter
 def test_pylint_test(chdir_root_path):
+    fpaths = []
     for root_path, dname, files in os.walk("test"):
         if dname == "__pycache__":
             continue
         for f in files:
-            if os.path.splitext(f)[1] != ".py":
-                continue
-            fpath = os.path.join(root_path, f)
-            cmd = "{} --rcfile={} --score=no".format(fpath, os.path.abspath(".pylintrc"))
-            stdout, stderr = import_module("pylint.epylint").py_run(cmd, return_std=True)
-            stdout, stderr = stdout.getvalue(), stderr.getvalue()
-            assert "" == stdout, stdout
+            if os.path.splitext(f)[1] == ".py":
+                fpaths.append(os.path.join(root_path, f))
+
+    for fpath in fpaths:
+        cmd = "{} --rcfile={} --score=no".format(fpath, os.path.abspath(".pylintrc"))
+        stdout, stderr = import_module("pylint.epylint").py_run(cmd, return_std=True)
+        stdout, stderr = stdout.getvalue(), stderr.getvalue()
+        assert "" == stderr, stderr
+        assert "" == stdout, stdout
