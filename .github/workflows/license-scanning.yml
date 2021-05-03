@@ -3,7 +3,7 @@ name: License Scanning
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "*" ]
   pull_request_target:
     branches: [ "master" ]
 
